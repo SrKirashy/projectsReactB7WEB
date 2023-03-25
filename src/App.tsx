@@ -11,11 +11,16 @@ const App = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const handlerMovies = async () => {
-    setLoading(true);
-    let res = await fetch('https://api.b7web.com.br/cinema/');
-    let json = await res.json();
-    setLoading(false);
-    setMovie(json);
+    try {
+      setLoading(true);
+      let res = await fetch('https://api.b7web.com.br/cinema/');
+      let json = await res.json();
+      setLoading(false);
+      setMovie(json);
+    } catch (e) {
+      setLoading(false);
+      alert('Ocorreu um erro, tente mais tarde.');
+    }
   }
 
 
@@ -29,7 +34,7 @@ const App = () => {
         </>
       }
 
-      {!loading &&
+      {!loading && movie.length > 0 &&
         <div className={styles.container}>
           <p>Quantidade de filmes em cartaz: {movie.length}</p>
           <div className={styles.containerTableMovies}>
@@ -37,11 +42,11 @@ const App = () => {
               <div className={styles.containerBlock}>
                 <div className={styles.containerMovies}>
                   <div className={styles.description}>
-                    <h1>{item.titulo}</h1>
+                    <h1 key={index}>{item.titulo}</h1>
                     <p className={styles.p} >Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
                   </div>
-                  <img src={item.avatar} className={styles.img} />
-                  <p>{item.titulo}</p>
+                  <img key={index} src={item.avatar} className={styles.img} />
+                  <p key={index} >{item.titulo}</p>
                 </div>
               </div>
             ))}
